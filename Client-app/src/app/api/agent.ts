@@ -25,7 +25,7 @@ const request={
     get:    <T>(url:string)=>axios.get<T>(url).then(responsBody),
     post:   <T>(url:string,body:{})=>axios.post<T>(url,body).then(responsBody),
     put:    <T>(url:string,body:{})=>axios.put<T>(url,body).then(responsBody),
-    delele:    <T>(url:string)=>axios.delete<T>(url).then(responsBody),
+    delete:    <T>(url:string)=>axios.delete<T>(url).then(responsBody),
 }
 
 const Activities={
@@ -33,7 +33,7 @@ const Activities={
     details:(id:string)=>request.get<Activity>(`Activity/${id}`),
     create:(activity:Activity)=>request.post<void>(`Activity`,activity),
     update:(activity:Activity)=>request.put<void>(`Activity/${activity.id}`,activity),
-    delele:(id:string)=>request.delele<void>(`activity/${id}`)
+    delete:(id:string)=>request.delete<void>(`activity/${id}`)
 }
 
 const agent={

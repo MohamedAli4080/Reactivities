@@ -1,16 +1,15 @@
 import React, { SyntheticEvent, useState } from 'react'
-import { Activity } from '../../../../models/activity'
-import { Button, Item, ItemMeta, Label, Segment } from 'semantic-ui-react'
-interface props{
-    activities:Activity[];
-    selectActivity:(id:string)=>void;
-    deleteActivity:(id:string)=>void;
-    submitting:boolean
-}
+import { Button, Item,  Label, Segment } from 'semantic-ui-react'
+import { UseStore } from '../../../stores/store';
+import { observer } from 'mobx-react-lite';
 
-function ActivityList({activities,selectActivity,deleteActivity,submitting}:props) {
+
+export default observer(function ActivityList() {
 
     const [target,setTarget]=useState('')
+    const {activityStore}=UseStore();
+    const {SelectActivity,deleteActivity,ActivityByDate,activities,loading}=activityStore
+
 function handleActivityDelete(e:SyntheticEvent<HTMLButtonElement> ,id:string){
     setTarget(e.currentTarget.name);
     deleteActivity(id);
@@ -18,8 +17,8 @@ function handleActivityDelete(e:SyntheticEvent<HTMLButtonElement> ,id:string){
   return (
     <Segment>
         <Item.Group divided>
-                {activities.map(activity=>(
-                    <Item key={activity.id}>
+                {ActivityByDate.map((activity,index)=>(
+                    <Item key={index}>
                         <Item.Content>
                             <Item.Header as='a'>{activity.title}</Item.Header>
                             <Item.Meta>{activity.date}</Item.Meta>
@@ -29,10 +28,10 @@ function handleActivityDelete(e:SyntheticEvent<HTMLButtonElement> ,id:string){
                             </Item.Description>
                             <Item.Extra>
                                
-                                <Button onClick={()=>selectActivity(activity.id)} floated='right' content='view' color='blue' />
+                                <Button onClick={()=>SelectActivity(activity.id)} floated='right' content='view' color='blue' />
                                 <Button 
                                     name={activity.id}
-                                    loading={submitting && target==activity.id} 
+                                    loading={loading && target==activity.id} 
                                     onClick={(e)=>handleActivityDelete(e,activity.id)} 
                                     floated='right'  
                                     content='delete' color='red' />
@@ -47,5 +46,4 @@ function handleActivityDelete(e:SyntheticEvent<HTMLButtonElement> ,id:string){
     </Segment>
   )
 }
-
-export default ActivityList
+)
